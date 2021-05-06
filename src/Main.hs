@@ -19,6 +19,7 @@ data Transition = Transition {
     write :: String,
     action :: String
 } deriving (Show)
+
 -- We expect a JSON object, so we fail at any non-Object value.
 instance FromJSON Transition where
     parseJSON (Object v) = do
@@ -42,6 +43,8 @@ data Configuration = Configuration {
     finals :: [String],
     transitions :: M.Map String [Transition]
 } deriving (Generic, Show)
+
+instance FromJSON Configuration
 
 --    left      current    right 
 -- [a,b,c,d,e]     a    [q,e,r,t,y]
@@ -73,7 +76,7 @@ moveTape tr blank tape = case action tr of
         l = left tape
         r = right tape
         s = symbol tape
-        
+
 
 type State = String
 
@@ -93,8 +96,11 @@ blankSymbol tm = head (blank (cfg tm))
 pprintTMachine :: TMachine -> IO ()
 pprintTMachine tm = putStrLn (printf "tape: %s|%c|%s" (left t) (symbol t) (right t))
     where t = tape tm
+
+reprTMachine :: TMachine -> String    
 reprTMachine tm = printf "state: %s tape: %s<%c>%s" (state tm) (left t) (symbol t) (right t)
     where t = tape tm
+
 nextTransition :: TMachine -> Maybe Transition
 nextTransition tm = case i of 
         Just index -> Just (trs!!index)
@@ -104,6 +110,7 @@ nextTransition tm = case i of
         trs = case mtrs of Just trs -> trs
         mtrs = M.lookup (state tm) (transitions (cfg tm))
         s = currentSymbol tm
+
 applyTransition :: Transition -> Char -> Tape -> Tape
 
 applyTransition tr blank tape = do
@@ -122,13 +129,15 @@ isNothing :: Maybe a -> Bool
 isNothing Nothing = True
 isNothing _ = False
 
+run :: TMachine -> TMachine
+-- TODO: Check not == "HALT" but (state tm) in config.finals
 run tm | state tm == "HALT" = trace (reprTMachine tm) tm
        | otherwise = trace (reprTMachine tm) (run . execute) tm
 
 execute :: TMachine -> TMachine
 execute tm  | finished = TMachine{
                 tape = tape tm,
-                state = "HALT",
+                state = state tm,
                 cfg = cfg tm
               }
             | valid = TMachine{
@@ -141,45 +150,17 @@ execute tm  | finished = TMachine{
                 state = state r,
                 cfg = cfg r
               }
-            where 
+            where
+                -- TODO: Check not == "HALT" but (state tm) in config.finals
                 finished = state tm == "HALT"
                 mnext = nextTransition tm
                 valid = not (isNothing mnext)
-                next = case mnext of  Just next -> next
+                next = case mnext of Just next -> next
                 r =  execute TMachine{
                         tape=tape tm,
                         cfg=cfg tm,
                         state=state tm
                     }
-
---  case mnext of
---     Just next ->
---         case state tm of
---             "HALT" -> tm
---             _ -> do
---                 trace nextState execute TMachine{
---                     tape=applyTransition next (blankSymbol tm) (tape tm),
---                     cfg=cfg tm,
---                     state=nextState
---                 }
---                 where
---                     mnext = case state tm of 
---                         "HALT" -> trace "where..\n" Nothing
---                         _ -> trace "where..\n" nextTransition tm           
---                     nextState = case mnext of 
---                         Just next -> to_state next
---                         _ -> "HALT"
---     _ -> trace (reprTMachine tm) TMachine{
---             tape=tape tm,
---             cfg = cfg tm,
---             state="HALT"
---         }
---     where
---         mnext = case state tm of 
---             "HALT" -> Nothing
---             _ -> nextTransition tm
-
-instance FromJSON Configuration
 
 -- Alphabet elements length is 1 
 isAlphabetValid :: Configuration -> Bool
@@ -198,11 +179,14 @@ main = do
     case args of -- Switch based on content of the 'args'
         [configFile, tapeText] -> do -- Add 'do' for multiline expression
             putStrLn (printf "Turing machine starting with config %s and tape %s" configFile tapeText)
+            -- TODO: Check is file and it is readable
             input <- B.readFile configFile
             let mm = decode input :: Maybe Configuration
             case mm of
                 Just config -> do
                     let m = initTMachine config tapeText
+                    -- TODO: Check config is valid if not exitWith
+                    --        isAlphabetValid, isBlankValid, isStatesValid
                     let f = run m
                     pprintTMachine f
                 _ -> do
