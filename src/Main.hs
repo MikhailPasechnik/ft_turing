@@ -12,6 +12,7 @@ import GHC.Generics
 import Debug.Trace
 import Data.Map as M (Map, lookup)
 import qualified Data.ByteString.Lazy as B
+import System.Directory
 
 data Transition = Transition {
     read_ :: String,
@@ -102,11 +103,11 @@ reprTMachine tm = printf "state: %s tape: %s<%c>%s" (state tm) (left t) (symbol 
     where t = tape tm
 
 nextTransition :: TMachine -> Maybe Transition
-nextTransition tm = case i of 
+nextTransition tm = case mindex of 
         Just index -> Just (trs!!index)
         _ -> Nothing 
     where
-        i = L.findIndex (\t -> head (read_ t) == s) trs
+        mindex = L.findIndex (\t -> head (read_ t) == s) trs
         trs = case mtrs of Just trs -> trs
         mtrs = M.lookup (state tm) (transitions (cfg tm))
         s = currentSymbol tm
@@ -172,6 +173,10 @@ isBlankValid config = length (blank config) == 1 && elem (blank config) (alphabe
 isStatesValid :: Configuration -> Bool
 isStatesValid config = elem "HALT" (states config) && elem (initial config) (states config) &&
     all (\e -> elem e (states config)) (finals config)
+-- Check that user input take consists of alphabet only and does't contain any blank symbol
+-- Check that all transitions op to_state fields in states
+-- Check that all transitions op read/write symbols is 1 length and present in alphabet
+-- Check that all transitions op action is "RIGHT" or ""
 
 main :: IO ()
 main = do
@@ -194,3 +199,4 @@ main = do
         _ -> do -- Switch default
             putStrLn "Wrong numper of arguments!"
             exitWith (ExitFailure 1)
+
