@@ -57,7 +57,7 @@ executable ft-turing
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:       base >=4.12 && <4.13, aeson, text, bytestring, containers, unordered-containers, directory
+  build-depends:       base, aeson, text, bytestring, containers, unordered-containers, directory
 
   -- Directories containing source files.
   hs-source-dirs:      src

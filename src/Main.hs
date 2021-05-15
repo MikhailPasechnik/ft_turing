@@ -1,59 +1,18 @@
---Use the OverloadedStrings language extension to represent strings as ByteString
-{-# LANGUAGE DeriveGeneric  #-}
 {-# LANGUAGE OverloadedStrings #-}
+
 module Main where
--- Json parsing library https://hackage.haskell.org/package/aeson-1.5.6.0/docs/Data-Aeson.html
+
 import Data.Aeson
 import Text.Printf
 import Data.List as L
 import System.Exit
 import System.Environment
-import GHC.Generics
 import Debug.Trace
-import Data.Map as M (Map, lookup)
+import Data.Map as M (Map, lookup, keys, elems, assocs)
 import qualified Data.ByteString.Lazy as B
 import System.Directory
 
-data Transition = Transition {
-    read_ :: String,
-    to_state :: String,
-    write :: String,
-    action :: String
-} deriving (Show)
-
--- We expect a JSON object, so we fail at any non-Object value.
-instance FromJSON Transition where
-    parseJSON (Object v) = do
-        read_ <- v .: "read"
-        to_state <- v .: "to_state"
-        write <- v .: "write"
-        action <- v .: "action"
-        return Transition{
-            read_= read_,
-            to_state = to_state,
-            write = write,
-            action = action
-        }
-
-data Configuration = Configuration {
-    name :: String,
-    alphabet :: [String],
-    blank :: String,
-    states :: [String],
-    initial :: String,
-    finals :: [String],
-    transitions :: M.Map String [Transition]
-} deriving (Generic, Show)
-
-instance FromJSON Configuration
-
---    left      current    right 
--- [a,b,c,d,e]     a    [q,e,r,t,y]
-data Tape = Tape {
-    left :: [Char],
-    right :: [Char],
-    symbol :: Char
-}
+import Models
 
 initTape :: [Char] -> Tape
 initTape text = Tape{
@@ -61,6 +20,7 @@ initTape text = Tape{
     left = [],
     right = tail text
 }
+
 moveTape :: Transition -> Char -> Tape -> Tape
 moveTape tr blank tape = case action tr of
     "LEFT" -> Tape{
@@ -78,22 +38,16 @@ moveTape tr blank tape = case action tr of
         r = right tape
         s = symbol tape
 
-
-type State = String
-
-data TMachine = TMachine {
-    tape :: Tape,
-    cfg :: Configuration,
-    state :: State
-}
 initTMachine :: Configuration -> String -> TMachine
 initTMachine config tapeString = TMachine {
     cfg = config,
     tape = initTape tapeString,
     state = initial config
 }
+
 currentSymbol tm = symbol (tape tm)
 blankSymbol tm = head (blank (cfg tm))
+
 pprintTMachine :: TMachine -> IO ()
 pprintTMachine tm = putStrLn (printf "tape: %s|%c|%s" (left t) (symbol t) (right t))
     where t = tape tm
@@ -113,7 +67,6 @@ nextTransition tm = case mindex of
         s = currentSymbol tm
 
 applyTransition :: Transition -> Char -> Tape -> Tape
-
 applyTransition tr blank tape = do
     let t = Tape {
         left = left tape,
@@ -121,11 +74,7 @@ applyTransition tr blank tape = do
         symbol = head (write tr)
     }
     moveTape tr blank t
--- applyTransition tr blank tape = trace (printf "applyTransition: s: %c b: %c a: %s => %s" (head (write tr)) blank (action tr) (left tape)) moveTape (action tr) blank Tape {
---         left = left tape,
---         right = right tape,
---         symbol = head (write tr)
---     }
+
 isNothing :: Maybe a -> Bool
 isNothing Nothing = True
 isNothing _ = False
@@ -163,40 +112,69 @@ execute tm  | finished = TMachine{
                         state=state tm
                     }
 
--- Alphabet elements length is 1 
-isAlphabetValid :: Configuration -> Bool
-isAlphabetValid config = all (\x -> length x == 1) (alphabet config)
--- Blank symbol length is 1 and present in alphabet
-isBlankValid :: Configuration -> Bool
-isBlankValid config = length (blank config) == 1 && elem (blank config) (alphabet config)
--- States must contain at least "HALT" and initial must be in states and all finals must be in states
-isStatesValid :: Configuration -> Bool
-isStatesValid config = elem "HALT" (states config) && elem (initial config) (states config) &&
-    all (\e -> elem e (states config)) (finals config)
+checkFile :: FilePath -> IO Bool
+checkFile filename = do
+    fileExist <- doesFileExist filename
+    if fileExist then do
+        filePermissions <- getPermissions filename
+        if readable filePermissions then
+            return True
+        else do
+            putStrLn "Permission denied"
+            return False
+    else do
+        putStrLn "File does not exist"
+        return False
+
+printProgramName :: String -> IO ()
+printProgramName name = do
+    let leftPadding = (39 - ((length name) `div` 2))
+    let righPadding = (39 - ((length name) - ((length name) `div` 2)))
+
+    putStrLn (replicate 80 '*')
+    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
+    putStrLn ("*" ++ (replicate leftPadding ' ') ++ name ++ (replicate righPadding ' ') ++ "*")
+    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
+    putStrLn (replicate 80 '*')
+
 -- Check that user input take consists of alphabet only and does't contain any blank symbol
 -- Check that all transitions op to_state fields in states
 -- Check that all transitions op read/write symbols is 1 length and present in alphabet
 -- Check that all transitions op action is "RIGHT" or ""
 
+checkConfig :: Configuration -> IO Bool
+checkConfig config = do
+    if all (\x -> length x == 1) (alphabet config)
+        && elem (blank config) (alphabet config)
+        && elem (initial config) (states config)
+        && all (\e -> elem e (states config)) (finals config) then
+        -- && all (\e -> (all (\ee -> elem (read ee) (alphabet config)) (snd e))) (assocs (transitions config)) then
+        return True
+    else return False
+
 main :: IO ()
 main = do
     args <- getArgs -- Read program arguments to 'args' variable
     case args of -- Switch based on content of the 'args'
-        [configFile, tapeText] -> do -- Add 'do' for multiline expression
-            putStrLn (printf "Turing machine starting with config %s and tape %s" configFile tapeText)
-            -- TODO: Check is file and it is readable
-            input <- B.readFile configFile
-            let mm = decode input :: Maybe Configuration
-            case mm of
+        [configFile, tapeText] -> do
+            fileOk <- checkFile configFile
+            if fileOk then return ()
+            else exitWith (ExitFailure 1)
+
+            configFileBuffer <- B.readFile configFile
+            let mconfig = decode configFileBuffer :: Maybe Configuration
+            case mconfig of
                 Just config -> do
-                    let m = initTMachine config tapeText
-                    -- TODO: Check config is valid if not exitWith
-                    --        isAlphabetValid, isBlankValid, isStatesValid
-                    let f = run m
+                    configOk <- checkConfig config
+                    if configOk then return ()
+                    else exitWith (ExitFailure 1) 
+
+                    printProgramName (name config)
+                    let machine = initTMachine config tapeText
+                    let f = run machine
                     pprintTMachine f
                 _ -> do
-                    putStrLn "dead"
+                    putStrLn "Json file parse error"
         _ -> do -- Switch default
-            putStrLn "Wrong numper of arguments!"
+            putStrLn "Wrong number of arguments!"
             exitWith (ExitFailure 1)
-
