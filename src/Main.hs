@@ -11,6 +11,7 @@ import Debug.Trace
 import Data.Map as M (Map, lookup, keys, elems, assocs)
 import qualified Data.ByteString.Lazy as B
 import System.Directory
+import Control.Monad
 
 import Models
 
@@ -79,13 +80,12 @@ isNothing :: Maybe a -> Bool
 isNothing Nothing = True
 isNothing _ = False
 
-run :: TMachine -> TMachine
--- TODO: Check not == "HALT" but (state tm) in config.finals
-run tm | state tm == "HALT" = trace (reprTMachine tm) tm
-       | otherwise = trace (reprTMachine tm) (run . execute) tm
+run :: Configuration -> TMachine -> TMachine
+run config tm | elem (state tm) (finals config) = trace (reprTMachine tm) tm
+              | otherwise = trace (reprTMachine tm) (run (config) (execute config tm))
 
-execute :: TMachine -> TMachine
-execute tm  | finished = TMachine{
+execute :: Configuration -> TMachine -> TMachine
+execute config tm  | finished = TMachine{
                 tape = tape tm,
                 state = state tm,
                 cfg = cfg tm
@@ -101,12 +101,11 @@ execute tm  | finished = TMachine{
                 cfg = cfg r
               }
             where
-                -- TODO: Check not == "HALT" but (state tm) in config.finals
-                finished = state tm == "HALT"
+                finished = elem (state tm) (finals config)
                 mnext = nextTransition tm
                 valid = not (isNothing mnext)
                 next = case mnext of Just next -> next
-                r =  execute TMachine{
+                r = execute config TMachine{
                         tape=tape tm,
                         cfg=cfg tm,
                         state=state tm
@@ -119,38 +118,47 @@ checkFile filename = do
         filePermissions <- getPermissions filename
         if readable filePermissions then
             return True
-        else do
-            putStrLn "Permission denied"
-            return False
-    else do
-        putStrLn "File does not exist"
-        return False
-
-printProgramName :: String -> IO ()
-printProgramName name = do
-    let leftPadding = (39 - ((length name) `div` 2))
-    let righPadding = (39 - ((length name) - ((length name) `div` 2)))
-
-    putStrLn (replicate 80 '*')
-    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
-    putStrLn ("*" ++ (replicate leftPadding ' ') ++ name ++ (replicate righPadding ' ') ++ "*")
-    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
-    putStrLn (replicate 80 '*')
-
--- Check that user input take consists of alphabet only and does't contain any blank symbol
--- Check that all transitions op to_state fields in states
--- Check that all transitions op read/write symbols is 1 length and present in alphabet
--- Check that all transitions op action is "RIGHT" or ""
+        else return False
+    else return False
 
 checkConfig :: Configuration -> IO Bool
 checkConfig config = do
     if all (\x -> length x == 1) (alphabet config)
         && elem (blank config) (alphabet config)
         && elem (initial config) (states config)
-        && all (\e -> elem e (states config)) (finals config) then
-        -- && all (\e -> (all (\ee -> elem (read ee) (alphabet config)) (snd e))) (assocs (transitions config)) then
+        && all (\e -> elem e (states config)) (finals config)
+        && all (\e -> elem e (states config)) (keys (transitions config))
+        && all (\e -> (all (\ee -> elem (read_ ee) (alphabet config)) e)) (elems (transitions config))
+        && all (\e -> (all (\ee -> elem (write ee) (alphabet config)) e)) (elems (transitions config)) 
+        && all (\e -> (all (\ee -> elem (to_state ee) (states config)) e)) (elems (transitions config))
+        && all (\e -> (all (\ee -> elem (action ee) (["RIGHT", "LEFT"])) e)) (elems (transitions config)) then
         return True
     else return False
+
+checkInput :: Configuration -> String -> IO Bool
+checkInput config input = do
+    if all (\i -> elem i (join (alphabet config))) input then
+        return True
+    else return False
+
+printProgramConfig :: Configuration -> IO ()
+printProgramConfig config = do
+    let leftPadding = (39 - ((length (name config)) `div` 2))
+    let rightPadding = (39 - ((length (name config)) - ((length (name config)) `div` 2)))
+
+    putStrLn (replicate 80 '*')
+    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
+    putStrLn ("*" ++ (replicate leftPadding ' ') ++ (name config) ++ (replicate rightPadding ' ') ++ "*")
+    putStrLn ("*" ++ (replicate 78 ' ') ++ "*")
+    putStrLn (replicate 80 '*')
+
+    putStrLn (printf ("Alphabet: %s") (show (alphabet config)))
+    putStrLn (printf ("Blank: \"%s\"") (blank config))
+    putStrLn (printf ("States: %s") (show (states config)))
+    putStrLn (printf ("Initial: \"%s\"") (initial config))
+    putStrLn (printf ("Finals: %s") (show (finals config)))
+    forM_ (assocs (transitions config)) (\i -> forM_ ((snd i)) (\j -> putStrLn (printf "(%s, %s) -> (%s, %s, %s)" (fst i) (read_ j) (to_state j) (write j) (action j))))
+    putStrLn (replicate 80 '*')
 
 main :: IO ()
 main = do
@@ -159,7 +167,9 @@ main = do
         [configFile, tapeText] -> do
             fileOk <- checkFile configFile
             if fileOk then return ()
-            else exitWith (ExitFailure 1)
+            else do
+                putStrLn "Something wrong with the config file"
+                exitWith (ExitFailure 1)
 
             configFileBuffer <- B.readFile configFile
             let mconfig = decode configFileBuffer :: Maybe Configuration
@@ -167,14 +177,22 @@ main = do
                 Just config -> do
                     configOk <- checkConfig config
                     if configOk then return ()
-                    else exitWith (ExitFailure 1) 
+                    else do
+                        putStrLn "Something wrong with config"
+                        exitWith (ExitFailure 1) 
 
-                    printProgramName (name config)
+                    inputOk <- checkInput config tapeText
+                    if inputOk then return ()
+                    else do
+                        putStrLn "Something wrong with input"
+                        exitWith (ExitFailure 1)
+
+                    printProgramConfig config
                     let machine = initTMachine config tapeText
-                    let f = run machine
+                    let f = run config machine
                     pprintTMachine f
                 _ -> do
-                    putStrLn "Json file parse error"
+                    putStrLn "Something wrong with config"
         _ -> do -- Switch default
             putStrLn "Wrong number of arguments!"
             exitWith (ExitFailure 1)
