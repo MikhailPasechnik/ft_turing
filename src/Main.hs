@@ -160,9 +160,22 @@ printProgramConfig config = do
     forM_ (assocs (transitions config)) (\i -> forM_ ((snd i)) (\j -> putStrLn (printf "(%s, %s) -> (%s, %s, %s)" (fst i) (read_ j) (to_state j) (write j) (action j))))
     putStrLn (replicate 80 '*')
 
+printUsage :: IO ()
+printUsage = do
+    putStrLn "usage: ft_turing [-h] jsonfile input\n"
+    putStrLn "positional arguments:"
+    putStrLn "   jsonfile                 json description of the machine\n"
+    putStrLn "   input                    input of the machine\n"
+    putStrLn "optional arguments:"
+    putStrLn "   -h, --help               show this help message and exit"
+
 main :: IO ()
 main = do
     args <- getArgs -- Read program arguments to 'args' variable
+    if elem "-h" args || elem "--help" args then do
+        printUsage
+        exitWith ExitSuccess
+    else return ()
     case args of -- Switch based on content of the 'args'
         [configFile, tapeText] -> do
             fileOk <- checkFile configFile
@@ -194,5 +207,5 @@ main = do
                 _ -> do
                     putStrLn "Something wrong with config"
         _ -> do -- Switch default
-            putStrLn "Wrong number of arguments!"
+            printUsage
             exitWith (ExitFailure 1)
