@@ -43,7 +43,8 @@ initTMachine :: Configuration -> String -> TMachine
 initTMachine config tapeString = TMachine {
     cfg = config,
     tape = initTape tapeString,
-    state = initial config
+    state = initial config,
+    stuck = False
 }
 
 currentSymbol tm = symbol (tape tm)
@@ -81,37 +82,34 @@ isNothing Nothing = True
 isNothing _ = False
 
 run :: Configuration -> TMachine -> TMachine
-run config tm | elem (state tm) (finals config) = trace (reprTMachine tm) tm
+run config tm | elem (state tm) (finals config) || stuck tm = trace (reprTMachine tm) tm
               | otherwise = trace (reprTMachine tm) (run (config) (execute config tm))
 
 execute :: Configuration -> TMachine -> TMachine
 execute config tm  | finished = TMachine{
                 tape = tape tm,
                 state = state tm,
-                cfg = cfg tm
+                cfg = cfg tm,
+                stuck = False
               }
             | valid = TMachine{
                 tape = applyTransition next (blankSymbol tm) (tape tm),
                 state = to_state next,
-                cfg = cfg tm
+                cfg = cfg tm,
+                stuck = False
               }
             | otherwise = TMachine{
-                tape = tape r,
-                state = state r,
-                cfg = cfg r
+                tape = tape tm,
+                state = state tm,
+                cfg = cfg tm,
+                stuck = True
               }
             where
                 finished = elem (state tm) (finals config)
                 mnext = nextTransition tm
                 valid = not (isNothing mnext)
                 next = case mnext of Just next -> next
-                r = execute config TMachine{
-                        tape=tape tm,
-                        cfg=cfg tm,
-                        state=state tm
-                    }
 
-checkFile :: FilePath -> IO Bool
 checkFile filename = do
     fileExist <- doesFileExist filename
     if fileExist then do

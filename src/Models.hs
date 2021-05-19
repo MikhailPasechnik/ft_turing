@@ -48,5 +48,6 @@ data Tape = Tape {
 data TMachine = TMachine {
     tape :: Tape,
     cfg :: Configuration,
-    state :: String
+    state :: String,
+    stuck :: Bool
 }
