@@ -157,11 +157,13 @@ checkConfig config | not alphabetLenOne = "Alphabet must consists of strings wit
                        allToStateInStates = all (\e -> (all (\ee -> elem (to_state ee) (states config)) e)) (elems (transitions config))
                        actionOk = all (\e -> (all (\ee -> elem (action ee) (["RIGHT", "LEFT"])) e)) (elems (transitions config))
 
-checkInput :: Configuration -> String -> IO Bool
-checkInput config input = do
-    if all (\i -> i `elem` join (alphabet config)) input then
-        return True
-    else return False
+checkInput :: Configuration -> String -> String
+checkInput config input | not fromAlphabet = "Input must consist of 'alphabet' symbols"
+                        | not withoutBlank = "'Blank' symbol is forbidden in input" 
+                        | otherwise = ""
+    where
+        fromAlphabet = all (\i -> i `elem` join (alphabet config)) input
+        withoutBlank = all (\i -> i `notElem` blank config) input
 
 printProgramConfig :: Configuration -> IO ()
 printProgramConfig config = do
@@ -216,10 +218,10 @@ main = do
                         putStrLn configError
                         exitWith (ExitFailure 1)
 
-                    inputOk <- checkInput config tapeText
-                    if inputOk then return ()
+                    let inputError = checkInput config tapeText
+                    if null inputError then return ()
                     else do
-                        putStrLn "Something wrong with input"
+                        putStrLn inputError
                         exitWith (ExitFailure 1)
 
                     printProgramConfig config
