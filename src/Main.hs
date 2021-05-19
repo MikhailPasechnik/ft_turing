@@ -55,7 +55,7 @@ pprintTMachine tm = putStrLn (printf "tape: %s|%c|%s" (left t) (symbol t) (right
     where t = tape tm
 
 reprTMachine :: TMachine -> String    
-reprTMachine tm = printf "state: %s tape: %s<%c>%s" (state tm) (left t) (symbol t) (right t)
+reprTMachine tm = printf "%s\ESC[38;2;255;0;0m%c\ESC[0m%s   %s" (left t) (symbol t) (right t) (state tm)
     where t = tape tm
 
 nextTransition :: TMachine -> Maybe Transition
@@ -119,19 +119,27 @@ checkFile filename = do
         else return False
     else return False
 
-checkConfig :: Configuration -> IO Bool
-checkConfig config = do
-    if all (\x -> length x == 1) (alphabet config)
-        && elem (blank config) (alphabet config)
-        && elem (initial config) (states config)
-        && all (\e -> elem e (states config)) (finals config)
-        && all (\e -> elem e (states config)) (keys (transitions config))
-        && all (\e -> (all (\ee -> elem (read_ ee) (alphabet config)) e)) (elems (transitions config))
-        && all (\e -> (all (\ee -> elem (write ee) (alphabet config)) e)) (elems (transitions config)) 
-        && all (\e -> (all (\ee -> elem (to_state ee) (states config)) e)) (elems (transitions config))
-        && all (\e -> (all (\ee -> elem (action ee) (["RIGHT", "LEFT"])) e)) (elems (transitions config)) then
-        return True
-    else return False
+checkConfig :: Configuration -> String
+checkConfig config | not alphabetLenOne = "Alphabet must consists of strings with length of one!"
+                   | not blankInAlphabet = printf "Blank character '%s' not in alphabet!" (blank config)
+                   | not initalInState = "Initial state not in states!"
+                   | not allFinalsInStates = "Not all final states in states!"
+                   | not allTransitionsKeysInStates = "Not all transitions keys in states!"
+                   | not allReadInAlphabet = "Not all transitions read symbol in alphabet!"
+                   | not allWriteInAlphabet = "Not all transitions read symbol in alphabet!"
+                   | not allToStateInStates = "Not all transition to state def in states!"
+                   | not actionOk = "Some action in transition is not RIGHT and not LEFT!"
+                   | otherwise = ""
+                   where
+                       alphabetLenOne = all (\x -> length x == 1) (alphabet config)
+                       blankInAlphabet = elem (blank config) (alphabet config)
+                       initalInState = elem (initial config) (states config)
+                       allFinalsInStates = all (\e -> elem e (states config)) (finals config)
+                       allTransitionsKeysInStates = all (\e -> elem e (states config)) (keys (transitions config))  
+                       allReadInAlphabet = all (\e -> (all (\ee -> elem (read_ ee) (alphabet config)) e)) (elems (transitions config))
+                       allWriteInAlphabet = all (\e -> (all (\ee -> elem (write ee) (alphabet config)) e)) (elems (transitions config))
+                       allToStateInStates = all (\e -> (all (\ee -> elem (to_state ee) (states config)) e)) (elems (transitions config))
+                       actionOk = all (\e -> (all (\ee -> elem (action ee) (["RIGHT", "LEFT"])) e)) (elems (transitions config))
 
 checkInput :: Configuration -> String -> IO Bool
 checkInput config input = do
@@ -186,11 +194,11 @@ main = do
             let mconfig = decode configFileBuffer :: Maybe Configuration
             case mconfig of
                 Just config -> do
-                    configOk <- checkConfig config
-                    if configOk then return ()
+                    let configError = checkConfig config
+                    if null configError then return ()
                     else do
-                        putStrLn "Something wrong with config"
-                        exitWith (ExitFailure 1) 
+                        putStrLn configError
+                        exitWith (ExitFailure 1)
 
                     inputOk <- checkInput config tapeText
                     if inputOk then return ()
