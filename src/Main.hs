@@ -9,8 +9,10 @@ import System.Exit
 import System.Environment
 import Debug.Trace
 import Data.Map as M (Map, lookup, keys, elems, assocs)
+import Data.Maybe
 import qualified Data.ByteString.Lazy as B
 import System.Directory
+import System.IO
 import Control.Monad
 
 import Models
@@ -51,12 +53,22 @@ currentSymbol tm = symbol (tape tm)
 blankSymbol tm = head (blank (cfg tm))
 
 pprintTMachine :: TMachine -> IO ()
-pprintTMachine tm = putStrLn (printf "tape: %s|%c|%s" (left t) (symbol t) (right t))
+pprintTMachine tm = putStrLn (printf "|%15s\ESC[38;2;255;0;0m%c\ESC[0m%-15s| %s <--- PROGRAM FINISHED" (left t) (symbol t) (right t) (state tm))
     where t = tape tm
 
 reprTMachine :: TMachine -> String    
-reprTMachine tm = printf "%s\ESC[38;2;255;0;0m%c\ESC[0m%s   %s" (left t) (symbol t) (right t) (state tm)
-    where t = tape tm
+reprTMachine tm =
+    case M.lookup (state tm) (transitions config) of
+        Just transition -> do
+            printf "|%15s\ESC[38;2;255;0;0m%c\ESC[0m%-15s| (%s, %c) -> (%s, %s, %s)" (left t) (symbol t) (right t) (state tm) (symbol t)
+                (to_state (head (filter (\i -> head (read_ i) == symbol t) transition)))
+                (write (head (filter (\i -> head (read_ i) == symbol t) transition)))
+                (action (head (filter (\i -> head (read_ i) == symbol t) transition)))
+        Nothing -> do
+            replicate 80 '*'
+    where
+        config = cfg tm
+        t = tape tm
 
 nextTransition :: TMachine -> Maybe Transition
 nextTransition tm = case mindex of 
@@ -81,12 +93,14 @@ isNothing :: Maybe a -> Bool
 isNothing Nothing = True
 isNothing _ = False
 
-run :: Configuration -> TMachine -> TMachine
-run config tm | elem (state tm) (finals config) || stuck tm = trace (reprTMachine tm) tm
-              | otherwise = trace (reprTMachine tm) (run (config) (execute config tm))
+run :: TMachine -> TMachine
+run tm | elem (state tm) (finals config) || stuck tm = trace (reprTMachine tm) tm
+              | otherwise = trace (reprTMachine tm) (run (execute tm))
+    where
+        config = cfg tm
 
-execute :: Configuration -> TMachine -> TMachine
-execute config tm  | finished = TMachine{
+execute :: TMachine -> TMachine
+execute tm  | finished = TMachine{
                 tape = tape tm,
                 state = state tm,
                 cfg = cfg tm,
@@ -105,9 +119,11 @@ execute config tm  | finished = TMachine{
                 stuck = True
               }
             where
-                finished = elem (state tm) (finals config)
+                config = cfg tm
+                finished = state tm `elem` finals config
                 mnext = nextTransition tm
-                valid = not (isNothing mnext)
+                valid = isJust mnext
+                -- valid = not (isNothing mnext)
                 next = case mnext of Just next -> next
 
 checkFile filename = do
@@ -143,7 +159,7 @@ checkConfig config | not alphabetLenOne = "Alphabet must consists of strings wit
 
 checkInput :: Configuration -> String -> IO Bool
 checkInput config input = do
-    if all (\i -> elem i (join (alphabet config))) input then
+    if all (\i -> i `elem` join (alphabet config)) input then
         return True
     else return False
 
@@ -180,7 +196,7 @@ main = do
     args <- getArgs -- Read program arguments to 'args' variable
     if elem "-h" args || elem "--help" args then do
         printUsage
-        exitWith ExitSuccess
+        exitSuccess
     else return ()
     case args of -- Switch based on content of the 'args'
         [configFile, tapeText] -> do
@@ -208,7 +224,7 @@ main = do
 
                     printProgramConfig config
                     let machine = initTMachine config tapeText
-                    let f = run config machine
+                    let f = run machine
                     pprintTMachine f
                 _ -> do
                     putStrLn "Something wrong with config"
