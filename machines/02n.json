@@ -1,0 +1,44 @@
+{
+    "name" : "02n",
+    "alphabet": [ "0", ".", "y", "n", ">", "P", "*"],
+    "blank" : ".",
+    "states" : [
+        "init", 
+        "set_start", "maybe_yes", 
+        "mirror_pivot", "to_pivot", "place_pivot", 
+        "check_mirror", "HALT" 
+    ],
+    "initial" : "init",
+    "finals" : [ "HALT" ],
+    "transitions" : {
+        "init":[
+            {"read": "0", "to_state": "set_start", "write": ">", "action": "RIGHT"}
+        ],
+        "set_start":[
+            {"read": ".", "to_state": "HALT", "write": "y", "action": "RIGHT"},
+            {"read": "0", "to_state": "maybe_yes", "write": "P", "action": "RIGHT"}
+        ],
+        "maybe_yes":[
+            {"read": ".", "to_state": "HALT", "write": "y", "action": "RIGHT"},
+            {"read": "0", "to_state": "to_pivot", "write": "*", "action": "LEFT"}
+        ],
+        "to_pivot":[
+            {"read": "*", "to_state": "to_pivot", "write": "*", "action": "LEFT"},
+            {"read": "P", "to_state": "place_pivot", "write": "*", "action": "LEFT"}
+        ],
+        "place_pivot":[
+            {"read": "*", "to_state": "mirror_pivot", "write": "P", "action": "RIGHT"},
+            {"read": ">", "to_state": "check_mirror", "write": ">", "action": "RIGHT"}
+        ],
+        "mirror_pivot":[
+            {"read": "*", "to_state": "mirror_pivot", "write": "*", "action": "RIGHT"},
+            {"read": "0", "to_state": "to_pivot", "write": "*", "action": "LEFT"},
+            {"read": ".", "to_state": "HALT", "write": "n", "action": "LEFT"}
+        ],
+        "check_mirror":[
+            {"read": "*", "to_state": "check_mirror", "write": "*", "action": "RIGHT"},
+            {"read": "0", "to_state": "maybe_yes", "write": "P", "action": "RIGHT"},
+            {"read": ".", "to_state": "HALT", "write": "n", "action": "LEFT"}
+        ]
+    }
+}
