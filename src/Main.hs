@@ -60,7 +60,7 @@ reprTMachine :: TMachine -> String
 reprTMachine tm =
     case M.lookup (state tm) (transitions config) of
         Just transition -> do
-            printf "|%15s\ESC[38;2;255;0;0m%c\ESC[0m%-15s| (%s, %c) -> (%s, %s, %s)" (left t) (symbol t) (right t) (state tm) (symbol t)
+            printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| (%s, %c) -> (%s, %s, %s)" (left t) (symbol t) (right t) (state tm) (symbol t)
                 (to_state (head (filter (\i -> head (read_ i) == symbol t) transition)))
                 (write (head (filter (\i -> head (read_ i) == symbol t) transition)))
                 (action (head (filter (\i -> head (read_ i) == symbol t) transition)))
