@@ -1,0 +1,70 @@
+{
+	"name" : "palindrome",
+	"alphabet": [ "a", "b", "A", "B", ".", "y", "n"],
+	"blank" : ".",
+	"states" : [ "on_left", "until_right_a", "until_right_b", "check_a", "check_b", "check_success", "return", "fail", "success", "check_success_odd", "HALT"],
+	"initial" : "on_left",
+	"finals" : [ "HALT" ],
+    "transitions": {
+        "on_left": [
+            {"read": "a", "to_state": "until_right_a", "write": "A", "action": "RIGHT"},
+            {"read": "b", "to_state": "until_right_b", "write": "B", "action": "RIGHT"}
+        ],
+        "until_right_a": [
+            {"read": "a", "to_state": "until_right_a", "write": "a", "action": "RIGHT"},
+            {"read": "b", "to_state": "until_right_a", "write": "b", "action": "RIGHT"},
+            {"read": "A", "to_state": "check_a", "write": "A", "action": "LEFT"},
+            {"read": "B", "to_state": "check_a", "write": "B", "action": "LEFT"},
+            {"read": ".", "to_state": "check_a", "write": ".", "action": "LEFT"}
+        ],
+        "until_right_b": [
+            {"read": "a", "to_state": "until_right_b", "write": "a", "action": "RIGHT"},
+            {"read": "b", "to_state": "until_right_b", "write": "b", "action": "RIGHT"},
+            {"read": "A", "to_state": "check_b", "write": "A", "action": "LEFT"},
+            {"read": "B", "to_state": "check_b", "write": "B", "action": "LEFT"},
+            {"read": ".", "to_state": "check_b", "write": ".", "action": "LEFT"}
+        ],
+        "check_a": [
+            {"read": "a", "to_state": "check_success", "write": "A", "action": "LEFT"},
+            {"read": "b", "to_state": "fail", "write": "b", "action": "RIGHT"},
+            {"read": "A", "to_state": "success", "write": "A", "action": "RIGHT"}
+        ],
+        "check_b": [
+            {"read": "a", "to_state": "fail", "write": "a", "action": "RIGHT"},
+            {"read": "b", "to_state": "check_success", "write": "B", "action": "LEFT"},
+            {"read": "B", "to_state": "success", "write": "B", "action": "RIGHT"}
+        ],
+        "check_success": [
+            {"read": "a", "to_state": "check_success_odd", "write": "a", "action": "LEFT"},
+            {"read": "b", "to_state": "check_success_odd", "write": "b", "action": "LEFT"},
+            {"read": "A", "to_state": "success", "write": "A", "action": "RIGHT"},
+            {"read": "B", "to_state": "success", "write": "B", "action": "RIGHT"}
+        ],
+        "check_success_odd": [
+            {"read": "a", "to_state": "return", "write": "a", "action": "LEFT"},
+            {"read": "b", "to_state": "return", "write": "b", "action": "LEFT"},
+            {"read": "A", "to_state": "success", "write": "A", "action": "RIGHT"},
+            {"read": "B", "to_state": "success", "write": "B", "action": "RIGHT"}
+        ],
+        "return": [
+            {"read": "a", "to_state": "return", "write": "a", "action": "LEFT"},
+            {"read": "b", "to_state": "return", "write": "b", "action": "LEFT"},
+            {"read": "A", "to_state": "on_left", "write": "A", "action": "RIGHT"},
+            {"read": "B", "to_state": "on_left", "write": "B", "action": "RIGHT"}
+        ],
+        "success": [
+            {"read": "a", "to_state": "success", "write": "A", "action": "RIGHT"},
+            {"read": "b", "to_state": "success", "write": "B", "action": "RIGHT"},
+            {"read": "A", "to_state": "success", "write": "A", "action": "RIGHT"},
+            {"read": "B", "to_state": "success", "write": "B", "action": "RIGHT"},
+            {"read": ".", "to_state": "HALT", "write": "y", "action": "LEFT"}
+        ],
+        "fail": [
+            {"read": "a", "to_state": "fail", "write": "A", "action": "RIGHT"},
+            {"read": "b", "to_state": "fail", "write": "B", "action": "RIGHT"},
+            {"read": "A", "to_state": "fail", "write": "A", "action": "RIGHT"},
+            {"read": "B", "to_state": "fail", "write": "B", "action": "RIGHT"},
+            {"read": ".", "to_state": "HALT", "write": "n", "action": "LEFT"}
+        ]
+    }
+}
