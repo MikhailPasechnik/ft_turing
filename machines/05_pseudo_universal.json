@@ -2,7 +2,7 @@
     "name": "pseudo_universal",
     "alphabet": [
         "&",
-        "|",
+        "*",
         "^",
         "{",
         "}",
@@ -289,9 +289,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "goto-state-C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             }
         ],
@@ -393,9 +393,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "goto-state-S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             }
         ],
@@ -497,9 +497,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "goto-state-P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             }
         ],
@@ -601,9 +601,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "goto-state-H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             }
         ],
@@ -737,9 +737,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-C:1",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -841,9 +841,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-C:+",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -945,9 +945,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-C:.",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1049,9 +1049,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-C: ",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1153,9 +1153,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-S:1",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1257,9 +1257,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-S:+",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1361,9 +1361,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-S:.",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1465,9 +1465,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-S: ",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1569,9 +1569,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-P:1",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1673,9 +1673,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-P:+",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1777,9 +1777,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-P:.",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1881,9 +1881,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-P: ",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -1985,9 +1985,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-H:1",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -2089,9 +2089,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-H:+",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -2193,9 +2193,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-H:.",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -2297,9 +2297,9 @@
                 "action": "LEFT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "init-find-H: ",
-                "write": "|",
+                "write": "*",
                 "action": "LEFT"
             },
             {
@@ -3957,9 +3957,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-C(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4067,9 +4067,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-C(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4177,9 +4177,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-C(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4287,9 +4287,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-C( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4397,9 +4397,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-S(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4507,9 +4507,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-S(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4617,9 +4617,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-S(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4727,9 +4727,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-S( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4837,9 +4837,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-P(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -4947,9 +4947,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-P(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5057,9 +5057,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-P(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5167,9 +5167,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-P( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5277,9 +5277,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-H(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5387,9 +5387,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-H(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5497,9 +5497,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-H(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5607,9 +5607,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "find-state-H( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5723,9 +5723,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5821,9 +5821,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -5919,9 +5919,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6017,9 +6017,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6115,9 +6115,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6213,9 +6213,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6311,9 +6311,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6409,9 +6409,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6507,9 +6507,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6605,9 +6605,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6703,9 +6703,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6801,9 +6801,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6899,9 +6899,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -6997,9 +6997,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7095,9 +7095,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7193,9 +7193,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7653,9 +7653,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7751,9 +7751,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7849,9 +7849,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -7947,9 +7947,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-C( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8045,9 +8045,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8143,9 +8143,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8241,9 +8241,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8339,9 +8339,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-S( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8437,9 +8437,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8535,9 +8535,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8633,9 +8633,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8731,9 +8731,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-P( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8829,9 +8829,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(1)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -8927,9 +8927,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(+)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9025,9 +9025,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H(.)",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9123,9 +9123,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "to-next-trans-H( )",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9215,9 +9215,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(1)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9319,9 +9319,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(+)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9423,9 +9423,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(.)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9527,9 +9527,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<( )~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9631,9 +9631,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(1)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9735,9 +9735,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(+)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9839,9 +9839,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(.)~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -9943,9 +9943,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->( )~C",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10047,9 +10047,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(1)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10151,9 +10151,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(+)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10255,9 +10255,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(.)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10359,9 +10359,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<( )~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10463,9 +10463,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(1)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10567,9 +10567,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(+)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10671,9 +10671,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(.)~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10775,9 +10775,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->( )~S",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10879,9 +10879,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(1)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -10983,9 +10983,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(+)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11087,9 +11087,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(.)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11191,9 +11191,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<( )~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11295,9 +11295,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(1)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11399,9 +11399,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(+)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11503,9 +11503,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(.)~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11607,9 +11607,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->( )~P",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11711,9 +11711,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(1)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11815,9 +11815,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(+)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -11919,9 +11919,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<(.)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -12023,9 +12023,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval-<( )~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -12127,9 +12127,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(1)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -12231,9 +12231,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(+)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -12335,9 +12335,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->(.)~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {
@@ -12439,9 +12439,9 @@
                 "action": "RIGHT"
             },
             {
-                "read": "|",
+                "read": "*",
                 "to_state": "eval->( )~H",
-                "write": "|",
+                "write": "*",
                 "action": "RIGHT"
             },
             {

@@ -9,7 +9,7 @@ def gen():
     L = "LEFT"
     R = "RIGHT"
     PTR = "^"
-    STR = "|"
+    STR = "*"
     BGN = "&"
     lp =(
         BGN +  # Start
