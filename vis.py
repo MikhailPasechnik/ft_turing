@@ -26,7 +26,7 @@ class F(Frame):
             else:
                 color = "#dedede"
             canvas.create_rectangle(x, y, i*w + w, w + w, outline="#ababab", fill=color)
-            canvas.create_text(x+(w - b)/2, b+(w - b)/2, text=f"{c}", font=("DejaVu Math TeX Gyre", int(w/1.5)), justify=CENTER)
+            canvas.create_text(x+(w - b)/2, b+(w - b)/2, text=f"{c}", font=("DejaVu Math TeX Gyre", int(w/2)), justify=CENTER)
         canvas.pack(fill=BOTH, expand=1)
 import re
 

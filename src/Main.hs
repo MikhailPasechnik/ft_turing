@@ -53,8 +53,10 @@ currentSymbol tm = symbol (tape tm)
 blankSymbol tm = head (blank (cfg tm))
 
 pprintTMachine :: TMachine -> IO ()
-pprintTMachine tm = putStrLn (printf "|%15s\ESC[38;2;255;0;0m%c\ESC[0m%-15s| %s <--- PROGRAM FINISHED" (left t) (symbol t) (right t) (state tm))
-    where t = tape tm
+pprintTMachine tm = putStrLn (printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| %s <--- %s" (left t) (symbol t) (right t) (state tm) message)
+    where
+        message = if stuck tm then "PROGRAM STUCK" else "PROGRAM FINISHED" :: String
+        t = tape tm
 
 reprTMachine :: TMachine -> String    
 reprTMachine tm =
@@ -65,7 +67,7 @@ reprTMachine tm =
                 (write (head (filter (\i -> head (read_ i) == symbol t) transition)))
                 (action (head (filter (\i -> head (read_ i) == symbol t) transition)))
         Nothing -> do
-            replicate 80 '*'
+            printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s|" (left t) (symbol t) (right t)
     where
         config = cfg tm
         t = tape tm
