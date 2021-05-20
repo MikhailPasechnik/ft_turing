@@ -54,7 +54,7 @@ blankSymbol tm = head (blank (cfg tm))
 
 pprintTMachine :: TMachine -> IO ()
 pprintTMachine tm = putStrLn (printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| %s <--- %s" (left t) (symbol t) (right t) (state tm) message)
-    where
+    where 
         message = if stuck tm then "PROGRAM STUCK" else "PROGRAM FINISHED" :: String
         t = tape tm
 
@@ -62,10 +62,13 @@ reprTMachine :: TMachine -> String
 reprTMachine tm =
     case M.lookup (state tm) (transitions config) of
         Just transition -> do
-            printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| (%s, %c) -> (%s, %s, %s)" (left t) (symbol t) (right t) (state tm) (symbol t)
+            if not (isStuck tm) then printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| (%s, %c) -> (%s, %s, %s)" (left t) (symbol t) (right t) (state tm) (symbol t)
                 (to_state (head (filter (\i -> head (read_ i) == symbol t) transition)))
                 (write (head (filter (\i -> head (read_ i) == symbol t) transition)))
-                (action (head (filter (\i -> head (read_ i) == symbol t) transition)))
+                (action (head (filter (\i -> head (read_ i) == symbol t) transition))) 
+            else do
+                printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s| (%s, %c) -> STUCK" (left t) (symbol t) (right t) (state tm) (symbol t)
+
         Nothing -> do
             printf "|%s\ESC[38;2;255;0;0m%c\ESC[0m%s|" (left t) (symbol t) (right t)
     where
@@ -96,10 +99,15 @@ isNothing Nothing = True
 isNothing _ = False
 
 run :: TMachine -> TMachine
-run tm | elem (state tm) (finals config) || stuck tm = trace (reprTMachine tm) tm
+run tm | elem (state tm) (finals config) || stuck tm = tm
               | otherwise = trace (reprTMachine tm) (run (execute tm))
     where
         config = cfg tm
+isStuck :: TMachine -> Bool
+isStuck tm = 
+    case M.lookup (state tm) (transitions (cfg tm)) of
+        Just tr -> (length (filter (\i -> head (read_ i) == symbol (tape tm)) tr)) == 0
+        Nothing -> True
 
 execute :: TMachine -> TMachine
 execute tm  | finished = TMachine{
@@ -161,9 +169,11 @@ checkConfig config | not alphabetLenOne = "Alphabet must consists of strings wit
 
 checkInput :: Configuration -> String -> String
 checkInput config input | not fromAlphabet = "Input must consist of 'alphabet' symbols"
-                        | not withoutBlank = "'Blank' symbol is forbidden in input" 
+                        | not withoutBlank = "'Blank' symbol is forbidden in input"
+                        | not hasLength = "Your Input is Empty!"
                         | otherwise = ""
     where
+        hasLength = not (null input)
         fromAlphabet = all (\i -> i `elem` join (alphabet config)) input
         withoutBlank = all (\i -> i `notElem` blank config) input
 
