@@ -1,0 +1,97 @@
+{
+    "name": "0*n == 1*n",
+    "alphabet": ["0", "1", ".", "]", "[", "n", "y"],
+    "blank": ".",
+    "states": [
+        "init_right", 
+        "init_left", 
+        "HALT",
+        "find_0",
+        "kill_1",
+        "kill_0",
+        "goto_left",
+        "is_clear",
+        "start_reset",
+        "reset_left",
+        "reset_left_l",
+        "reset_right",
+        "reset_right_r",
+        "success_right",
+        "reset_finish"
+    ],
+    "initial": "init_right",
+    "finals": ["HALT"],
+    "transitions": {
+        "init_right": [
+            {"read": "0", "to_state": "goto_left", "write": "[", "action": "RIGHT"},
+            {"read": "1", "to_state":"reset_finish", "write": "1", "action":"RIGHT"}
+        ],
+        "goto_left": [
+            {"read": "1", "to_state": "goto_left", "write": "1", "action": "RIGHT"},
+            {"read": "0", "to_state": "goto_left", "write": "0", "action": "RIGHT"},
+            {"read": ".", "to_state": "init_left", "write": ".", "action": "LEFT"}
+        ],
+        "init_left": [
+            {"read": "1", "to_state": "find_0", "write": "]", "action": "LEFT"},
+            {"read": "[", "to_state":"reset_finish", "write": "0", "action":"RIGHT"},
+            {"read": "0", "to_state":"reset_left", "write": "0", "action":"LEFT"}
+        ],
+        "find_0": [
+            {"read": "1", "to_state": "find_0", "write": "1", "action": "LEFT"},
+            {"read": ".", "to_state": "find_0", "write": ".", "action": "LEFT"},
+            {"read": "0", "to_state": "kill_1", "write": "0", "action": "RIGHT"},
+            {"read": "[", "to_state": "is_clear", "write": "[", "action": "RIGHT"}
+        ],
+        "is_clear": [
+            {"read": ".", "to_state": "is_clear", "write": ".", "action": "RIGHT"},
+            {"read": "]", "to_state": "start_reset", "write": "]", "action": "RIGHT"},
+            {"read": "1", "to_state": "reset_left", "write": "1", "action": "RIGHT"}
+        ],
+        "start_reset": [
+            {"read": ".", "to_state": "reset_left", "write": "y", "action": "LEFT"}
+        ],
+        "kill_1": [
+            {"read": "1", "to_state": "kill_0", "write": ".", "action": "LEFT"},
+            {"read": ".", "to_state": "kill_1", "write": ".", "action": "RIGHT"},
+            {"read": "]", "to_state": "reset_left", "write": "]", "action": "LEFT"}
+        ],
+        "kill_0": [
+            {"read": "0", "to_state": "find_0", "write": ".", "action": "LEFT"},
+            {"read": ".", "to_state": "kill_0", "write": ".", "action": "LEFT"}
+        ],
+        "success_right":[
+            {"read" : "1", "to_state": "success_right", "write": "1", "action": "RIGHT"},
+            {"read" : "0", "to_state": "success_right", "write": "0", "action": "RIGHT"},
+            {"read" : ".", "to_state": "success_right", "write": ".", "action": "RIGHT"},
+            {"read" : "]", "to_state": "start_reset", "write": "]", "action": "RIGHT"}
+        ],
+        "reset_left":[
+            {"read" : ".", "to_state": "reset_left_l", "write": "1", "action": "LEFT"},
+            {"read" : "]", "to_state": "reset_left", "write": "]", "action": "LEFT"},
+            {"read" : "1", "to_state": "reset_left", "write": "1", "action": "LEFT"},
+            {"read" : "0", "to_state": "reset_left", "write": "0", "action": "LEFT"},
+            {"read" : "[", "to_state": "reset_finish", "write": "0", "action": "RIGHT"}
+        ],
+        "reset_left_l":[
+            {"read" : "[", "to_state": "reset_right", "write": "[", "action": "RIGHT"},
+            {"read" : "0", "to_state": "reset_right", "write": "0", "action": "RIGHT"},
+            {"read" : ".", "to_state": "reset_left_l", "write": ".", "action": "LEFT"}
+        ],
+        "reset_right":[
+            {"read" : ".", "to_state": "reset_right_r", "write": "0", "action": "RIGHT"}
+        ],
+        "reset_right_r":[
+            {"read" : ".", "to_state": "reset_right_r", "write": ".", "action": "RIGHT"},
+            {"read" : "1", "to_state": "reset_right_r", "write": "1", "action": "RIGHT"},
+            {"read" : "]", "to_state": "reset_left", "write": "]", "action": "LEFT"}
+        ],
+        "reset_finish":[
+            {"read" : "1", "to_state": "reset_finish", "write": "1", "action": "RIGHT"},
+            {"read" : "0", "to_state": "reset_finish", "write": "0", "action": "RIGHT"},
+            {"read" : "]", "to_state": "reset_finish", "write": "1", "action": "RIGHT"},
+            {"read" : "n", "to_state": "HALT", "write": "n", "action": "RIGHT"},
+            {"read" : ".", "to_state": "HALT", "write": "n", "action": "LEFT"},
+            {"read" : "y", "to_state": "HALT", "write": "y", "action": "LEFT"}
+        ]
+    }
+}
