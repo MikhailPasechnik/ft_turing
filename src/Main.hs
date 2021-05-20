@@ -217,7 +217,7 @@ main = do
             fileOk <- checkFile configFile
             if fileOk then return ()
             else do
-                putStrLn "Something wrong with the config file"
+                putStrLn "Failed to read config file!"
                 exitWith (ExitFailure 1)
 
             configFileBuffer <- B.readFile configFile
@@ -241,7 +241,7 @@ main = do
                     let f = run machine
                     pprintTMachine f
                 _ -> do
-                    putStrLn "Something wrong with config"
+                    putStrLn "Failed to parse JSON file, wrong schema!"
         _ -> do -- Switch default
             printUsage
             exitWith (ExitFailure 1)
