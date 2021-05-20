@@ -19,14 +19,14 @@ class F(Frame):
         canvas = Canvas(self, bg='gray')
         for i, c in enumerate(state):
             x = i*w+b
-            y = b
+            y = 0
             color = "#8f8f8f"
             if pivot == i:
                 color = "#c95562"
             else:
                 color = "#dedede"
             canvas.create_rectangle(x, y, i*w + w, w + w, outline="#ababab", fill=color)
-            canvas.create_text(x+(w - b)/2, y+(w - b)/2, text=f"{c}", font=("DejaVu Math TeX Gyre", int(w/1.5)), justify=CENTER)
+            canvas.create_text(x+(w - b)/2, b+(w - b)/2, text=f"{c}", font=("DejaVu Math TeX Gyre", int(w/1.5)), justify=CENTER)
         canvas.pack(fill=BOTH, expand=1)
 import re
 
@@ -63,7 +63,7 @@ def main():
             b = int(w/10)
             #w = w - b * (len(state) - 2)
             print('|'.join(sp), end='')
-            root.geometry(f"1920x{w}")
+            root.geometry(f"1920x{w + b}")
             frame.draw(state, at, w, b, ansi_clean.sub('', '|'.join(sp[2:])))
         except Exception as e:
             return
