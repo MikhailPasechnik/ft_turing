@@ -8,19 +8,16 @@ def fl(l, *c):
 def gen(l=None):
     L = "LEFT"
     R = "RIGHT"
-    alphabet = "".join(map(chr, range(97, 97+26)))
+    alphabet = "".join(map(chr, range(97, 97+26))).upper()
     if l:
         alphabet = alphabet[:l]
-    if "n" not in alphabet:
-        alphabet+="n"
-    if "y" not in alphabet:
-        alphabet+="y"
+    alphabet
     transitions = [
         (
             "init", [
-                st(c, f"match_{c}_right", ".", R) for c in alphabet
+                st(c, f"match_{c}_right", " ", R) for c in alphabet
             ] + [
-                st(".", "reset", ".", R)
+                st(" ", "reset", " ", R)
             ]
         ),
     ] + [
@@ -28,14 +25,14 @@ def gen(l=None):
             f"match_{c}_right", [
                 st(cc, f"match_{c}_right", cc, R) for cc in alphabet
             ] + [
-                st(".", f"is_{c}", ".", L)
+                st(" ", f"is_{c}", " ", L)
             ]
         ) for c in alphabet
     ] + [
         (
             f"is_{c}", [
                 st(c, f"swap_{c}", c, R),
-                st(".", f"finish", c, R)
+                st(" ", f"finish", c, R)
             ] + [
                 st(f, f"init_fail_{c}", f, L) for f in fl(alphabet, c)
             ]
@@ -45,7 +42,7 @@ def gen(l=None):
             f"init_fail_{c}", [
                 st(cc, f"init_fail_{c}", cc, L) for cc in alphabet
             ] + [
-                st(".", "fail", c, R)
+                st(" ", "fail", c, R)
             ]
         ) for c in alphabet
     ] + [
@@ -53,34 +50,34 @@ def gen(l=None):
             "fail", [
                 st(c, "fail", c, R) for c in alphabet
             ] + [
-                st(".", "recover", ".", R)
+                st(" ", "recover", " ", R)
             ]
         )
     ] + [
         (
             "recover", [
-                st(c, f"recover_{c}", ".", L) for c in alphabet
+                st(c, f"recover_{c}", " ", L) for c in alphabet
             ] + [
-                st(".", "no", ".", L)
+                st(" ", "no", " ", L)
             ]
         )
     ] + [
         (
             f"recover_{c}", [
-                st(".", "fail", c, R)
+                st(" ", "fail", c, R)
             ]
         ) for c in alphabet
     ] + [
         (
             "no", [
-                st(".", "HALT", "n", R)
+                st(" ", "HALT", "n", R)
             ]
         )
     ] + [
         (
             f"swap_{c}", [
-                st(c, f"match_{c}_left", ".", L),
-                st(".", f"swap_{c}", c, L)
+                st(c, f"match_{c}_left", " ", L),
+                st(" ", f"swap_{c}", c, L)
             ]
         ) for c in alphabet
     ] + [
@@ -88,41 +85,41 @@ def gen(l=None):
             f"match_{c}_left", [
                 st(cc, f"match_{c}_left", cc, L) for cc in alphabet
             ] + [
-                st(".", "init", c, R)
+                st(" ", "init", c, R)
             ]
         ) for c in alphabet
     ] + [
         (
             "finish", [
-                st(".", "reset", ".", R)
+                st(" ", "reset", " ", R)
             ]
         )
     ] + [
         (
             "reset", [
-                st(c, f"reset_{c}", ".", L) for c in alphabet
+                st(c, f"reset_{c}", " ", L) for c in alphabet
             ] + [
-                st(".", "yes", ".", L)
+                st(" ", "yes", " ", L)
             ]
         )
     ] + [
         (
             f"reset_{c}", [
-                st(".", "finish", c, R)
+                st(" ", "finish", c, R)
             ]
         ) for c in alphabet
     ] + [
 
         (
             "yes", [
-                st(".", "HALT", "y", R)
+                st(" ", "HALT", "y", R)
             ]
         )
     ]
     return dict(
         name = "palindrom",
-        alphabet = list(alphabet) + ["."],
-        blank = ".",
+        alphabet = list(alphabet +" yn"),
+        blank = " ",
         states = list(dict(transitions).keys()) + ["HALT"],
         initial = "init",
         finals = ["HALT"],
