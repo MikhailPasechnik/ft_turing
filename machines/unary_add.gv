@@ -1,0 +1,12 @@
+digraph unary_add {
+	node [shape=doublecircle]
+	scan
+	HALT
+	node [shape=circle]
+	scan -> scan [label="1/1 R"]
+	scan -> swap [label="+/. R"]
+	scan -> HALT [label="./. R"]
+	swap -> push [label="1/+ L"]
+	swap -> HALT [label="./. L"]
+	push -> scan [label="./1 R"]
+}

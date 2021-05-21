@@ -1,0 +1,16 @@
+digraph unary_sub {
+	node [shape=doublecircle]
+	scanright
+	HALT
+	node [shape=circle]
+	scanright -> scanright [label="./. R"]
+	scanright -> scanright [label="1/1 R"]
+	scanright -> scanright [label="-/- R"]
+	scanright -> eraseone [label="=/. L"]
+	eraseone -> subone [label="1/= L"]
+	eraseone -> HALT [label="-/. L"]
+	subone -> subone [label="1/1 L"]
+	subone -> skip [label="-/- L"]
+	skip -> skip [label="./. L"]
+	skip -> scanright [label="1/. R"]
+}

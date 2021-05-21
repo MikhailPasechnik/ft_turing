@@ -1,0 +1,21 @@
+digraph "02n" {
+	node [shape=doublecircle]
+	init
+	HALT
+	node [shape=circle]
+	init -> set_start [label="0/> R"]
+	set_start -> HALT [label="./y R"]
+	set_start -> maybe_yes [label="0/P R"]
+	maybe_yes -> HALT [label="./y R"]
+	maybe_yes -> to_pivot [label="0/* L"]
+	to_pivot -> to_pivot [label="*/* L"]
+	to_pivot -> place_pivot [label="P/* L"]
+	place_pivot -> mirror_pivot [label="*/P R"]
+	place_pivot -> check_mirror [label=">/> R"]
+	mirror_pivot -> mirror_pivot [label="*/* R"]
+	mirror_pivot -> to_pivot [label="0/* L"]
+	mirror_pivot -> HALT [label="./n L"]
+	check_mirror -> check_mirror [label="*/* R"]
+	check_mirror -> maybe_yes [label="0/P R"]
+	check_mirror -> HALT [label="./n L"]
+}
