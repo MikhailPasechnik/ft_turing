@@ -2,7 +2,8 @@
 
 *School 42 project*
 
-<img src="logo.png" height="400">
+
+<img src="output.png" height="400"><img src="logo.png" height="400">
 
 Install Haskell: https://www.haskell.org/platform/#linux-ubuntu
 
@@ -15,7 +16,7 @@ Machines:
      A machine able to compute an unary substruction.
 
      `./ft-turing ./machines/unary_sub.json 11-1=`
-
+     
      output: `1`
 
      <img src="machines/unary_sub.png" height="400">
