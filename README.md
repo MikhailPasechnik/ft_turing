@@ -82,7 +82,7 @@ Machines:
 
     `./ft-turing ./machines/05_pseudo_universal.json "C&C{[+S>.][.H>.][1C>1]}S{[1P<+][.H<.]}P{[.C>1]}*11111+111111111111111111"`
 
-Visialisation:
+**Visialisation:**
 
 `d` Move one step forward
 `a` Move one step back
@@ -90,3 +90,17 @@ Visialisation:
 `./ft-turing ./machines/unary_add.json 111+11 2>&1 1>/dev/null | python3 vis.py`
 
 `./ft-turing ./machines/05_pseudo_universal.json "C&C{[+S>.][.H>.][1C>1]}S{[1P<+][.H<.]}P{[.C>1]}*11111+111" 2>&1 1>/dev/null | python3 vis.py`
+
+**Generate Graph for machine config:**
+
+`pip3 install graphviz`
+
+.gv file and .pdf
+
+`python3 ./machines/graph_gen.py ./machines/02n.json`
+
+`python3 ./machines/graph_gen.py ./machines/02n.json ./machines/02n.gv`
+
+.png
+
+`dot -Tpng -Gdpi=128 machines/02n.gv > machines/02n.png`
