@@ -13,9 +13,9 @@ Build and run:
 
 `cabal new-build`
 
-`./dist-newstyle/build/x86_64-linux/ghc-8.6.5/ft-turing-0.1.0.0/x/ft-turing/build/ft-turing/ft-turing --help`
-
-```usage: ft_turing [-h] jsonfile input
+```
+./dist-newstyle/build/x86_64-linux/ghc-8.6.5/ft-turing-0.1.0.0/x/ft-turing/build/ft-turing/ft-turing --help
+usage: ft_turing [-h] jsonfile input
 
 positional arguments:
    jsonfile                 json description of the machine
